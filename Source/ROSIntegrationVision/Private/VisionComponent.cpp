@@ -22,6 +22,8 @@
 #include "IImageWrapperModule.h"
 #include "UObject/ConstructorHelpers.h"
 
+#include "Components/StaticMeshComponent.h"
+
 #if PLATFORM_WINDOWS
   #define _USE_MATH_DEFINES
 #endif
@@ -264,7 +266,7 @@ void UVisionComponent::TickComponent(float DeltaTime,
 	uint8_t* TargetDepthBuf = new uint8_t[TargetDepthBufSize]; // Allocate a byte for every pixel * 4 Bytes for a single 32Bit Float
 
 	const uint32_t ColorImageSize = Width * Height * 3;
-	convertDepth((uint16_t *)DepthPtr, (__m128*)TargetDepthBuf);
+	// TODO: convertDepth((uint16_t *)DepthPtr, (__m128*)TargetDepthBuf);
 	// convertDepth((uint16_t *)packet.pDepth, (__m128*)&msgDepth->data[0]);
 
 	UE_LOG(LogTemp, Verbose, TEXT("Buffer Offsets: %d %d %d"), OffsetColor, OffsetDepth, OffsetObject);
@@ -610,6 +612,7 @@ void UVisionComponent::GenerateColors(const uint32_t NumberOfColors)
 	}
 }
 
+/*
 bool UVisionComponent::ColorObject(AActor *Actor, const FString &name)
 {
 	const FColor &ObjectColor = ObjectColors[ObjectToColor[name]];
@@ -626,14 +629,16 @@ bool UVisionComponent::ColorObject(AActor *Actor, const FString &name)
 			if (UStaticMesh *StaticMesh = StaticMeshComponent->GetStaticMesh())
 			{
 				uint32 PaintingMeshLODIndex = 0;
-				uint32 NumLODLevel = StaticMesh->RenderData->LODResources.Num();
+				uint32 NumLODLevel = StaticMesh->GetNumLODs();
+				//UE4: uint32 NumLODLevel = StaticMesh->RenderData->LODResources.Num();
 				//check(NumLODLevel == 1);
-				FStaticMeshLODResources &LODModel = StaticMesh->RenderData->LODResources[PaintingMeshLODIndex];
-				FStaticMeshComponentLODInfo *InstanceMeshLODInfo = NULL;
+				const FStaticMeshLODResources& LODModel = StaticMesh->GetRenderData()->LODResources[PaintingMeshLODIndex];
+				// UE4: FStaticMeshLODResources &LODModel = StaticMesh->RenderData->LODResources[PaintingMeshLODIndex];
+				// FStaticMeshComponentLODInfo *InstanceMeshLODInfo = NULL;
 
 				// PaintingMeshLODIndex + 1 is the minimum requirement, enlarge if not satisfied
 				StaticMeshComponent->SetLODDataCount(PaintingMeshLODIndex + 1, StaticMeshComponent->LODData.Num());
-				InstanceMeshLODInfo = &StaticMeshComponent->LODData[PaintingMeshLODIndex];
+				FStaticMeshComponentLODInfo& InstanceMeshLODInfo = StaticMeshComponent->LODData[PaintingMeshLODIndex];
 
 				{
 					InstanceMeshLODInfo->OverrideVertexColors = new FColorVertexBuffer;
@@ -690,6 +695,7 @@ bool UVisionComponent::ColorAllObjects()
 
 	return true;
 }
+*/
 
 void UVisionComponent::ProcessColor()
 {
@@ -744,6 +750,7 @@ void UVisionComponent::ProcessObject()
 }
 
 // TODO maybe shift towards "server" who publishs async
+/*
 void UVisionComponent::convertDepth(const uint16_t *in, __m128 *out) const
 {
 	const size_t size = (Width * Height) / 4;
@@ -758,3 +765,4 @@ void UVisionComponent::convertDepth(const uint16_t *in, __m128 *out) const
 		);// / 100;
 	}
 }
+*/

@@ -94,12 +94,12 @@ private:
   void ToDepthImage(const TArray<FFloat16Color> &ImageData, uint8 *Bytes) const;
   void StoreImage(const uint8 *ImageData, const uint32 Size, const char *Name) const;
   void GenerateColors(const uint32_t NumberOfColors);
-  bool ColorObject(AActor *Actor, const FString &name);
-  bool ColorAllObjects();
+  // bool ColorObject(AActor *Actor, const FString &name);
+  // bool ColorAllObjects();
   void ProcessColor();
   void ProcessDepth();
   void ProcessObject();
 
   // in must hold Width*Height*2(float) Bytes
-  void convertDepth(const uint16_t *in, __m128 *out) const;
+  // void convertDepth(const uint16_t *in, __m128 *out) const;
 };
